@@ -12,25 +12,28 @@
     <script type="text/javascript" async 
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.bundle.min.js"></script>
-    <script>
+    <script>        
         function drow(){
             var p=document.getElementById("p").value
             var q=document.getElementById("q").value
-            var an=[document.getElementById("a0").value]
-            p=p.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/(?<=\))([^\+\-\*\/\(\)\^])/g,"*$1").replace(/\)\(/g,"\)*\(")
-            q=q.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/(?<=\))([^\+\-\*\/\(\)\^])/g,"*$1").replace(/\)\(/g,"\)*\(")
+            var a0=document.getElementById("a0").value
+            p=p.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(")
+            q=q.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(")
+            p=p.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
+            q=q.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
             p=p.replace("＋","+").replace("ー","-").replace("＊","*")
-            if(p.match(/[^\d\+\-*\/n\^()]/)){return alert("四則演算とべき乗以外は使えません")}
-            if(q.match(/[^\d\+\-*\/n\^()]/)){return alert("四則演算とべき乗以外は使えません")}
-            if(p=="")p="0"
+            if(a0.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
+            if(p.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
+            if(q.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
+            if(p=="")p="1"
             if(q=="")q="0"
+            if(a0=="")a0="0"
+            var an=[eval(a0)]
 
             for(var a=1;a<11;a++){   
                 p1=p.replace(/n/g,a).replace(/\^/g,"**")
                 q1=q.replace(/n/g,a).replace(/\^/g,"**")
-                console.log(p)
-                an.push((eval(p1))*an[a-1]+eval(q1))
+                an.push((eval(p1))*eval(an[a-1])+eval(q1))
             }
 
 
@@ -55,8 +58,6 @@
         <tr><td>\(a_1\)</td><td>\(a_2\)</td><td>\(a_3\)</td><td>\(a_4\)</td><td>\(a_5\)</td><td>\(a_6\)</td><td>\(a_7\)</td><td>\(a_8\)</td><td>\(a_9\)</td><td>\(a_{10}\)</td></tr>
         <tr><td name="a1">1</td><td name="a2"></td><td name="a3"></td><td name="a4"></td><td name="a5"></td><td name="a6"></td><td name="a7"></td><td name="a8"></td><td name="a9"></td><td name="a10"></td></tr>
     </table>
-
-    <canvas id="charts"></canvas>
 </form>
 </body>
 </html>
