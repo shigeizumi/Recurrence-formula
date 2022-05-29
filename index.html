@@ -20,9 +20,9 @@
             a0=a0.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/（/g,"(").replace(/）/g,")").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
             p=p.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/（/g,"(").replace(/）/g,")").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
             q=q.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
-            p=p.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(")
-            q=q.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(")
-            p=p.replace("＋","+").replace("ー","-").replace("＊","*")
+            a0=a0.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
+            p=p.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
+            q=q.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
             if(a0.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
             if(p.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
             if(q.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
@@ -32,8 +32,8 @@
             var an=[eval(a0)]
 
             for(var a=1;a<11;a++){   
-                p1=p.replace(/n/g,a).replace(/\^/g,"**")
-                q1=q.replace(/n/g,a).replace(/\^/g,"**")
+                p1=p.replace(/n/g,a)
+                q1=q.replace(/n/g,a)
                 if(i==1)an.push((eval(p1))*eval(an[a-1])+eval(q1))
                 if(i==2)an.push((eval(p1))/eval(an[a-1])+eval(q1))
             }
