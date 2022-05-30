@@ -1,79 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>漸化式から項を求める</title>
-    <style>
-        td,th{border:solid 2px #575757;padding:1px 10px}
-        table{border-collapse:collapse;}
-    </style>
-    <script type="text/javascript" async 
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    <script>        
-        function drow(i){
-            var p=document.getElementById("p"+i).value
-            var q=document.getElementById("q"+i).value
-            var a0=document.getElementById("a0"+i).value
-            a0=a0.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/（/g,"(").replace(/）/g,")").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
-            p=p.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/（/g,"(").replace(/）/g,")").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
-            q=q.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
-            a0=a0.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
-            p=p.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
-            q=q.replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
-            if(a0.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
-            if(p.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
-            if(q.match(/[^\d\+\-*\/n\^()\.]/)){return alert("四則演算とべき乗以外は使えません")}
-            if(p=="")p="1"
-            if(q=="")q="0"
-            if(a0=="")a0="0"
-            var an=[eval(a0)]
-
-            for(var a=1;a<11;a++){   
-                p1=p.replace(/n/g,a)
-                q1=q.replace(/n/g,a)
-                if(i==1)an.push((eval(p1))*eval(an[a-1])+eval(q1))
-                if(i==2)an.push((eval(p1))/eval(an[a-1])+eval(q1))
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>漸化式から項を求める</title>
+        <style>
+            td,th{border:solid 2px #575757;padding:1px 10px}
+            table{border-collapse:collapse;}
+        </style>
+        <script type="text/javascript" async 
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+        <script> 
+            function reload(i){
+                if(i==1){
+                    document.getElementById("notfrac").hidden=false
+                    document.getElementById("frac").hidden=true
+                }
+                if(i==2){
+                    document.getElementById("notfrac").hidden=true
+                    document.getElementById("frac").hidden=false
+                }
             }
-
-
-            var table=document.getElementById("table"+i)
-            table.hidden=false
-            for(var j=1;j<11;j++){
-                table.rows[1].cells[j-1].innerText=an[j-1]
+        
+            function Calculation(c){
+                var ca=document.getElementById(c).value
+                ca=ca.replace(/＋/g,"+").replace(/ー/g,"-").replace(/＊/g,"*").replace(/＾/g,"^").replace(/（/g,"(").replace(/）/g,")").replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) - 0xFEE0)})
+                ca=ca.replace(/\(\)/g,"").replace(/([^\+\-\*\/\(\)\^])n/gi,"$1*n").replace(/([^\+\-\*\/\(\)\^])(?=\()/g,"$1*").replace(/\)([^\+\-\*\/\(\)\^])/g,"\)*$1").replace(/\)\(/g,"\)*\(").replace(/\^/g,"**")
+                if(ca.match(/[^\d\+\-*\/n\^()\.]/)){return alert("数字とn、四則演算とべき乗以外は使えません")}
+                return ca
             }
-        }
         
-    </script>
-</head>
-<body>
-    <form id="form1" name="form1">
-    <p>
-        \(a_1=\) <input type="text" style="width:100px;" id="a01" tabindex="1"><br>
-        \(a_{n+1}=\) <input type="text" id="p1" style="width:100px;" tabindex="2"> \( a_n\)+<input type="text" id="q1" style="width:100px;" tabindex="3">
-        <br>
-        <input type="button" onclick="drow(1)" value="項を求める" tabindex="4">
-        <br><br>
+            function drow(i){
+                var p=Calculation("p"+i)
+                var q=Calculation("q"+i)
+                var a0=Calculation("a0"+i)
+                if(p=="")p="1"
+                if(q=="")q="0"
+                if(a0=="")a0="0"
+                var an=[String(eval(a0).toFixed(5)).replace(/0+$/g,"").replace(/\.$/,"")]
 
-        <table id="table1" hidden>
-            <tr><td>\(a_1\)</td><td>\(a_2\)</td><td>\(a_3\)</td><td>\(a_4\)</td><td>\(a_5\)</td><td>\(a_6\)</td><td>\(a_7\)</td><td>\(a_8\)</td><td>\(a_9\)</td><td>\(a_{10}\)</td></tr>
-            <tr><td name="a1">1</td><td name="a2"></td><td name="a3"></td><td name="a4"></td><td name="a5"></td><td name="a6"></td><td name="a7"></td><td name="a8"></td><td name="a9"></td><td name="a10"></td></tr>
-        </table>
-    <p>
-        \(a_1=\) <input type="text" style="width:100px;" id="a02" tabindex="5"><br>
-        \(a_{n+1}= \) <input type="text" id="p2" style="width:100px;" tabindex="6"> \(\frac{1}{a_n} \)+<input type="text" id="q2" style="width:100px;" tabindex="7">
-        <br>
-        <input type="button" onclick="drow(2)" value="項を求める" tabindex="8">
-        <br><br>
+                for(var a=1;a<11;a++){   
+                    p1=p.replace(/n/g,a)
+                    q1=q.replace(/n/g,a)
+                    if(i==1)an.push(String(((eval(p1))*eval(an[a-1])+eval(q1)).toFixed(5)).replace(/0+$/g,"").replace(/\.$/,""))
+                    if(i==2)an.push(String(((eval(p1))/eval(an[a-1])+eval(q1)).toFixed(5)).replace(/0+$/g,"").replace(/\.$/,""))
+                }
 
-        <table id="table2" hidden>
-            <tr><td>\(a_1\)</td><td>\(a_2\)</td><td>\(a_3\)</td><td>\(a_4\)</td><td>\(a_5\)</td><td>\(a_6\)</td><td>\(a_7\)</td><td>\(a_8\)</td><td>\(a_9\)</td><td>\(a_{10}\)</td></tr>
-            <tr><td name="a1">1</td><td name="a2"></td><td name="a3"></td><td name="a4"></td><td name="a5"></td><td name="a6"></td><td name="a7"></td><td name="a8"></td><td name="a9"></td><td name="a10"></td></tr>
-        </table>
+                var table=document.getElementById("table")
+                table.hidden=false
+                for(var j=1;j<11;j++){
+                    table.rows[1].cells[j-1].innerText=an[j-1]
+                }
+            }
+            
+        </script>
+    </head>
+    <body>
+        <form id="form1" name="form1">
         
-    
-</form>
-</body>
-</html>
+        <p id="notfrac">
+            \(a_1=\) <input type="text" style="width:100px;" id="a01" tabindex="1"><br>
+            \(a_{n+1}=\) <input type="text" id="p1" style="width:100px;" tabindex="2"> \( a_n\)+<input type="text" id="q1" style="width:100px;" tabindex="3">
+            <br>
+            <input type="button" onclick="drow(1)" value="項を求める" tabindex="4">
+            <br><br>
+        </p>
+        <p id="frac" hidden>
+            \(a_1=\) <input type="text" style="width:100px;" id="a02" tabindex="1"><br>
+            \(a_{n+1}= \) <input type="text" id="p2" style="width:100px;" tabindex="2"> \(\frac{1}{a_n} \)+<input type="text" id="q2" style="width:100px;" tabindex="3">
+            <br>
+            <input type="button" onclick="drow(2)" value="項を求める" tabindex="8">
+            <br><br>
+
+            <table id="table" hidden>
+                <tr><td>\(a_1\)</td><td>\(a_2\)</td><td>\(a_3\)</td><td>\(a_4\)</td><td>\(a_5\)</td><td>\(a_6\)</td><td>\(a_7\)</td><td>\(a_8\)</td><td>\(a_9\)</td><td>\(a_{10}\)</td></tr>
+                <tr><td name="a1">1</td><td name="a2"></td><td name="a3"></td><td name="a4"></td><td name="a5"></td><td name="a6"></td><td name="a7"></td><td name="a8"></td><td name="a9"></td><td name="a10"></td></tr>
+            </table>
+        </p>
+            <table><tr><td>
+                <input type="radio" name="choice" id="choice1" onchange="reload(1)" checked><label for="choice1">\(a_n\)　　</label><br>
+                <input type="radio" name="choice" id="choice2" onchange="reload(2)"><label for="choice2">\(\frac{1}{a_n} \)　　</label>
+            </td></tr></table><br>
+
+            四則演算(+-*/)とべき乗(^)が使えます。<br>    
+            空欄の場合、\(a_1=0\) , \(a_{n+1}=a_n \) (または\(\; a_{n+1}=\frac{1}{a_{n+1}})\) と見做します。    
+    </form>
+    </body>
+    </html>
